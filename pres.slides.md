@@ -2,8 +2,6 @@
 title: Active Care for Diabetes Patients
 author: BGSE Data Science Center
 date: May, 2019
-nocite: |
-  @*
 ---
 
 
@@ -50,7 +48,7 @@ How can a healthcare coach, with less training and worse data than a doctor, hop
 
 ## Dashboard Screenshot
 
-![](./images/dash3.png){height=300px}
+![](./images/dash1.png){height=300px}
 
 ([Description in [**Appendix 1**]{.smallcaps}](#project-results))
 
@@ -126,6 +124,10 @@ Where possible, we can also take advantage of:
 
 3. The user-provided label (pre-meal/post-meal)
 
+## Label Recovery
+
+![](./images/dash2.png){height=300px}
+
 
 ## Model
 
@@ -142,9 +144,9 @@ See [[**Appendix 3**]{.smallcaps}](#maths) for mathematical formalization.
 
 ## Model
 
-![](./images/orals-distributions.pdf){height=180px}
+![](./images/glucose_dist.pdf){height=180px}
 
-Fitted distributions, on a single day, for a mid-stage patient on oral medications, showing the symmetric and asymmetric Laplace distributions.
+Example of the symmetric and asymmetric Laplace distributions.
 
 
 ## Solving the Model
@@ -262,7 +264,7 @@ $$
 Where $\textbf{w}$ is a vector of learned coefficients, $j$ is the date, and $\Phi$ represents the feature transformation function, in this case, a Fourier basis. given the date.
 
 
-## Appendix 4 - A1c Predictions
+## Appendix 4 - A1c Predictions {#predictions}
 
 Well-controlled medical studies comparing A1C scores with with average fasting and postprandial readings suggest that the correlations between readings and A1c scores should be:
 
@@ -272,4 +274,45 @@ Well-controlled medical studies comparing A1C scores with with average fasting a
 
 We can also formulate a linear model and find that on our small sample of patients, using our fitted distributions outperforms the average of all readings (see associated paper).
 
-## References {#refs}
+## References
+
+Organization, World Health, and others. 2006. "Definition and
+Diagnosis of Diabetes Mellitus and Intermediate Hyperglycaemia:
+Report of a Who"
+
+Dempster, Arthur P, Nan M Laird, and Donald B Rubin. 1977.
+“Maximum Likelihood from Incomplete Data via the Em
+Algorithm.” Journal of the Royal Statistical Society: Series B
+(Methodological) 39 (1): 1–22.
+
+Yu, Keming, and Rana A. Moyeed. 2001. “Bayesian Quantile
+Regression.” Statistics & Probability Letters 54 (4): 437–47.
+
+Russel, David, and Mark Steel. 2017. “Continuous Mixtures with
+Skewness and Heavy Tails.”
+
+
+## References
+
+
+Rossell, David, and Francisco J Rubio. 2018. “Tractable Bayesian
+Variable Selection: Beyond Normality.” Journal of the American
+Statistical Association 113 (524): 1742–58.
+
+Monnier, Louis, Claude Colette, Louis Monnier, and Claude
+Colette. 2006. “Contributions of Fasting and Postprandial
+Glucose to Hemoglobin A1c.” Endocrine Practice 12 (Supplement
+1): 42–46.
+
+Van’t Riet, Esther, Marjan Alssema, Josina M Rijkelijkhuizen, Piet
+J Kostense, Giel Nijpels, and Jacqueline M Dekker. 2010.
+“Relationship Between A1c and Glucose Levels in the General
+Dutch Population: The New Hoorn Study.” Diabetes Care 33 (1):
+61–66
+
+## References
+
+Nathan, David M, Judith Kuenen, Rikke Borg, Hui Zheng, David
+Schoenfeld, and Robert J Heine. 2008. “Translating the A1c
+Assay into Estimated Average Glucose Values.” Diabetes Care 31
+(8): 1473–8.
