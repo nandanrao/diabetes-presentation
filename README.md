@@ -1,6 +1,6 @@
 ---
 title: Active Care for Diabetes Patients
-author: BGSE Data Science Center
+author: Barcelona GSE Data Science Center
 date: May, 2019
 ---
 
