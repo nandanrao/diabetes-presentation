@@ -4,114 +4,149 @@ author: Barcelona GSE Data Science Center
 date: May, 2019
 ---
 
+## Glucose Data
 
-## Project Goal
-
-Create a tool for active management of type II diabetes patients in large populations.
-
-&nbsp;
-
-* Large populations require scalable solutions for gathering data (**\alert{patient-generated data}**).
-
-* Active management implies recognizing problems faster than the traditional process (**\alert{medium-term trends}**).
+This patient's condition is slowly getting worse:
 
 
-## Traditional Diabetes Management
+![](./images/tricky-slow-improve-noise.png){height=300px}
 
-Type II diabetes is when cells develop insulin resistence and absorb glucose from the blood slowly. It is diagnosed by the following tests:
+## Glucose Data
 
-1. Glucose level after fasting for 8-10 hours.
-2. Glucose level 2 hours after drinking a certain sweet concoction.
-3. Hemoglobin A1c test. Correlated with the average blood glucose in the past 2-3 months (a mixture of #1 and #2).
+This patient is steadily improving:
 
-In the traditional medical system, these same tests are administered and examined by doctors in regular check ups every 3-6 months.
-
-## Active Management Companies
-
-Data and inspiration for this problem comes from Kannact.
-
-Kannact is a healthcare technology startup based in the U.S. that manages diabetic populations for employers.
-
-Glucose readings are collected by the patients themselves via provided 4G-connected glucometers.
-
-Kannact employs health coaches to call patients every month. Coaches can see the glucose readings that patients take.
+![](./images/tricky-slow-decline-noise.png){height=300px}
 
 
-## The data gap
+## Insight
 
-Doctors love the A1c score primarily because it is not effected by the noise of recent meals.
+Can your algorithm see the signal in the noise?
 
-Self-administered glucose measurements are much less reliable than those administered in controlled environments at the doctor's office.
+## Insight
 
-How can a healthcare coach, with less training and worse data than a doctor, hope to recognize problems and intervene?
-
-
-## Dashboard Screenshot
-
-![](./images/dash1.png){height=300px}
-
-([Description in [**Appendix 1**]{.smallcaps}](#project-results))
+Ours can.
 
 
-## The Data
+## Noise
 
-Blood glucose levels at any point in time are caused by two factors:
+![](./images/tricky-slow-improve-noise.png){height=300px}
 
-1. The amount of glucose dumped into the blood when the patient eats.
-2. The amount of glucose absorbed from the blood by the cells.
+## Signal
 
-In the tests to determine how the disease is developing, #1 is minimized or controlled. It's noise.
-
-#1, however, contains information about the behavior of the patient and their diet.
+![](./images/tricky-slow-improve-infer.png){height=300px}
 
 
-## Type II Diabetes - Data
+## Noise
 
-It's important to understand that take-home glucometers have historically been seen as useful for #1: determining the effect of food.
+![](./images/tricky-slow-decline-noise.png){height=300px}
 
-This can be seen in the following screenshot of the product description of one of the most popular glucometer brands:
+## Signal
 
-
-## Marketing Screenshot (Glucometer)
-
-
-![](./images/glucometer.png){height=300px}
+![](./images/tricky-slow-decline-infer.png){height=300px}
 
 
 
-## Marketing - Glucose Management
+## Goal
 
-There is a bonanza of new apps to help people manage their diabetes.
+Delivering medecine means improving outcomes: reducing hospitalizations and serious complications from diseases. In order to do that, we need to take into consideration the following causal chain of events: 
 
-The apps focus on short-term changes in glucose: the effects of individual food items on glucose changes and daily changes in levels.
+**\alert{actions}** -> **\alert{disease}** -> **\alert{outcomes}**
 
-At a daily level, the signal that matters for understanding the evolution of type II diabetes, the biological changes in cells' insulin sensitivity, is lost.
-
-See [[**Appendix 2**]{.smallcaps}](#marketing-screenshots) for marketing screenshots.
+Data-driven healthcare requires good data in each category. 
 
 
-## Nowcasting
+## Partners
 
-This is why we have proposed to nowcast the trends traditionally observed at a 3-6 month level, as they evolve on a daily/weekly basis.
+Kannact is a healthcare technology startup in the US delivering active care management to diabetes and other chronic care patients.
 
+Each diabetes patient in their program is assigned a 4g-connected glucometer and a personal health coach.
 
-## Our Data
-
-The glucometers used in the Kannact data have buttons to label readings as "pre-meal" and "post-meal".
-
-Some patients label all of their readings as "pre-meal" or "post-meal".
-
-Most patients forget some of the time.
-
-Many patients forget all of the time.
+Kannact collects a lot of data about their patients and they shared it all with us.
 
 
-## Our Data
+## Data
 
-![](./images/dash3.png){height=300px}
+Their data can be organized into the three categories of interest: 
+
+**\alert{ACTIONS}** Phone calls and messages with coaches, exercise data from mobile health applications, medecine intake, glucose readings. Supporting factors include data on psychological profile (via behavioral survey), age, and information on comorbidites.
+
+**\alert{DISEASE}** Glucose readings, other biometrics (weight, blood pressure, etc.)
+
+**\alert{OUTCOMES}** Insurance claims, notes from coaches.
+
+## Goal
+
+The whole process of **\alert{actions}** -> **\alert{outcomes}** can take, literally, a lifetime. 
+
+For example, poor eating habits of an early-stage diabetes patient can easily take more than 20 years before it leads to kidney failure. Thus, **learning the system end-to-end will be slow and inefficient**. 
+
+Luckily, science has provided us with _alot_ of knowledge about the mechanism **\alert{disease}** -> **\alert{outcomes}**.
+
+## Diabetes
+
+In the case of early- and mid-stage type II diabetes, science tells us that **increased insulin resistance** in the body's cells causes negative outcomes.
+
+Thus, learning the mechanism **\alert{actions}** -> **\alert{insulin resistance}** will be both **efficient** (targeted) and **effective** (scientifically sound causal mechanism). 
 
 
-## Process
+## Insulin Resistance
+
+Changes in insulin resistance evolve slowly over time. 
+
+Measuring these changes via periodic and expensive lab tests, of glucose and hemoglobin A1c, is well-proven and effective. 
+
+Efficiently learning the mechanism **\alert{actions}** -> **\alert{insulin resistance}**, however, requires measuring the effect of actions at a frequency higher than implied by a bi-annual visit to the doctor to perform expensive lab tests.
+
+## Glucose Readings
+
+Accurately measuring medium-term changes in insulin resistance via at-home glucometers is not a solved problem.
+
+It is a prerequisite for effective learning of the **\alert{actions}** -> **\alert{disease}** mechanism.
+
+It is also the goal of this project. 
+
+
+## Measure medium-term trends
+
+In order to measure medium-term trends in disease state we need:
+
+1. A measurement that can change smoothly over time, picking up local, nonlinear trends at any time, while being robust to both potentially incorrect data and data that comes from a distribution with very heavy tails and skewness. 
+
+2. The ability to separate different trends from the readings.
+
+
+## Why robust? 
+
+A diabetes patient will occasionally have some high readings. 
+
+How can we know if those high readings come from isolated events (a couple meals on vacation) and how can we know if they represent part of a problematic trend (their cells' resistence to insulin is increasing)?
+
+We need a framework that can separate those two cases. Any framework that relies on averages or makes statistical assumptions of Gaussianity will fail to separate them. 
+
+
+## Why separate the trends? 
+
+We build separate trends for \alert{fasting} and \alert{postprandial} glucose readings.
+
+Why? 
+
+These readings indicate different, if related, biological processes. Postprandial readings are more directly influenced by meals and behavior, while fasting readings provide a cleaner view into the long-term biological state of the patient. 
+
+Different trends require different interventions.
+
+
+## Missing Data
+
+In medical studies, we know exactly which glucose readings are fasting and which are postprandial. 
+
+In the real world, data is not so clean. Patients only sometimes label their glucose readings. 
+
+In our data, the glucometers, like many glucometers, allow patients to label readings as "pre" or "post" meal, but do not have a special indicator for "fasting".
+
+Thus, in addition to finding the trends over time, our method must be able to infer which readings belong to which trend. 
+
+
+## Methodology
 
 In order to recover the labels _of interest_ (fasting/postprandial) we need to consider two dimensions:
 
@@ -137,7 +172,7 @@ We formulate a two-component mixture model in two dimensions (mg/dL and time of 
 
 * Glucose levels exhibit heavy tails. Postprandial readings have large positive excursions. We thus learn a symmetric and asymmetric Laplace distribution respectively.
 
-* To recover the smooth time trend in the location parameter of the glucose distributions, we run quantile regression on a Fourier basis transformation of the date value.
+* To recover the smooth time trend in the location parameter of the glucose distributions, we run mode regression on a Fourier basis transformation of the date value.
 
 See [[**Appendix 3**]{.smallcaps}](#maths) for mathematical formalization.
 
@@ -153,7 +188,7 @@ Example of the symmetric and asymmetric Laplace distributions.
 
 We develop a novel EM algorithm tailored to our model, which is non-standard in two ways:
 
-1. Uses quantile regression to model evolution of the location parameters of the Laplace distribution over time.
+1. Uses mode regression to model evolution of the location parameters of the Laplace distribution over time.
 
 2. Semi-supervised by allowing hard-assigned labels when deemed "reliable".
 
@@ -181,7 +216,6 @@ A probabilistic model is necessary to separate signal from noise and provide it 
 
 Recovering the medium-term trends of the underlying biological process is an important first step that opens up many exciting opportunities:
 
-
 * Explore reliable predictions of A1c scores using the fasting/postprandial evolution (See [[**Appendix 4**]{.smallcaps}](#predictions) for promising initial results).
 
 * Test for effectiveness of interventions (coaching sessions).
@@ -191,128 +225,7 @@ Recovering the medium-term trends of the underlying biological process is an imp
 * Test effectiveness of diet and exercise given appropriate data (mobile health apps).
 
 
-## Appendix 1 - Project Results {#project-results}
-
-The dashboard enables:
-
-* Active-management professionals (health coaches and doctors) to monitor the evolution of key variables for early- and mid-stage type II diabetes patients.
-
-* Coaches and patients to see the effects of short-term diet and exercise behaviors on mediumed- and long-term evolution of the biological process underlying the disease.
-
-* Coaches and patients to see the quality, regularity, and reliability of the blood-glucose readings taken by the patient and the effects of improving.
 
 
-## Appendix 1 - Project Results
-
-From the noisy signal of raw glucose levels, the dashboard presents the inferred variables that align with the medical theory on managing type II diabetes:
-
-1. Fasting glucose levels and their evolution over time.
-2. Postprandial glucose levels and their evolution over time.
-3. Daily "swings" in glucose levels that causes cardiovascular stress to the system.
 
 
-## Appendix 1 - Project Results
-
-Technical results needed to build the dashboard and present these variables in a usable manner:
-
-* Infer the "type" of blood-glucose reading from the partially-labelled patient data provided by the glucometer (fasting/postprandial).
-
-* Infer a "location" parameter for each type of reading that is robust to the outliers and skewness present in patient-recorded glucose data.
-
-* Model the evolution of that location parameter for each patient over time, including prediction and interpolation when missing readings.
-
-## Appendix 2 - Marketing Screenshots {#marketing-screenshots}
-
-![](./images/diabetes-m.png){height=300px}
-
-## Appendix 2 - Marketing Screenshots
-
-![](./images/glucosebuddy.png){height=300px}
-
-## Appendix 2 - Marketing Screenshots
-
-![](./images/onedrop.png){height=225px}
-
-
-## Appendix 3 - Model {#maths}
-
-For each patient, we learn the following model:
-
-Let $y_{ij}$ be the $i^{th}$ glucose reading on date $j$ and time $t_{ij} \in [0,24]$.
-
-Let $z_{ij} \in {1,2}$ be the latent fasting/postprandial label. We formulated the following mixture model in two dimensions (glucose and time):
-
-$$
-(y_{ij}, t_{ij} | z_{ij} = 1) \sim Laplace(\mu^1_{j}, \sigma^1), \ Beta(\alpha_i, \beta_i)
-$$
-$$
-(y_{ij}, t_{ij} | z_{ij} = 2) \sim Laplace(\mu^2_{j}, \sigma^2, \delta^2), \ Unif(0, 24)
-$$
-
-Where we assume $y_{ij} \perp t_{ij} \ | \ z_{ij}$.
-
-## Appendix 3 - Model
-
-In order to allow changes over time, we learn the location parameters, $\mu$, as a function of the date.
-
-This is done via a regression on a non-linear basis transformation of the date value:
-
-$$
-\mu^k_j = \textbf{w} \Phi ( j )
-$$
-
-Where $\textbf{w}$ is a vector of learned coefficients, $j$ is the date, and $\Phi$ represents the feature transformation function, in this case, a Fourier basis. given the date.
-
-
-## Appendix 4 - A1c Predictions {#predictions}
-
-Well-controlled medical studies comparing A1C scores with with average fasting and postprandial readings suggest that the correlations between readings and A1c scores should be:
-
-1. For fasting levels, between .46 and .71, the upper end being for populations known to have diabetes. We recovered .66 with our model and patients.
-
-2. For postprandial levels, between .33 and .79. We recovered .54 with our model and patients.
-
-We can also formulate a linear model and find that on our small sample of patients, using our fitted distributions outperforms the average of all readings (see associated paper).
-
-## References
-
-Organization, World Health, and others. 2006. "Definition and
-Diagnosis of Diabetes Mellitus and Intermediate Hyperglycaemia:
-Report of a Who"
-
-Dempster, Arthur P, Nan M Laird, and Donald B Rubin. 1977.
-“Maximum Likelihood from Incomplete Data via the Em
-Algorithm.” Journal of the Royal Statistical Society: Series B
-(Methodological) 39 (1): 1–22.
-
-Yu, Keming, and Rana A. Moyeed. 2001. “Bayesian Quantile
-Regression.” Statistics & Probability Letters 54 (4): 437–47.
-
-Russel, David, and Mark Steel. 2017. “Continuous Mixtures with
-Skewness and Heavy Tails.”
-
-
-## References
-
-
-Rossell, David, and Francisco J Rubio. 2018. “Tractable Bayesian
-Variable Selection: Beyond Normality.” Journal of the American
-Statistical Association 113 (524): 1742–58.
-
-Monnier, Louis, Claude Colette, Louis Monnier, and Claude
-Colette. 2006. “Contributions of Fasting and Postprandial
-Glucose to Hemoglobin A1c.” Endocrine Practice 12 (Supplement
-1): 42–46.
-
-Van’t Riet, Esther, Marjan Alssema, Josina M Rijkelijkhuizen, Piet
-J Kostense, Giel Nijpels, and Jacqueline M Dekker. 2010.
-“Relationship Between A1c and Glucose Levels in the General
-Dutch Population: The New Hoorn Study.” Diabetes Care 33 (1):
-61–66
-
-## References
-
-Nathan, David M, Judith Kuenen, Rikke Borg, Hui Zheng, David
-Schoenfeld, and Robert J Heine. 2008. “Translating the A1c
-Assay into Estimated Average Glucose Values.” Diabetes Care 31
-(8): 1473–8.
