@@ -4,6 +4,15 @@ author: Barcelona GSE Data Science Center
 date: May, 2019
 ---
 
+
+## Partners
+
+![](./images/accenture-logo.png){width=350px}
+
+
+![](./images/kannactlogo.png){width=200px}
+
+
 ## Glucose Data
 
 This patient's condition is slowly getting worse:
@@ -247,6 +256,15 @@ Recovering the medium-term trends of the underlying biological process is an imp
 * Test for effectiveness of program with regards to covariates of interest (psychological profiles).
 
 * Test effectiveness of diet and exercise given appropriate data (mobile health apps).
+
+
+## Summary
+
+Accenture asked us to for a novel solution to Diabetes care and Kannact brought us messy, patient-generated glucose data.
+
+We turned it into trends, with full uncertainty quantification, uncovering the evolution of the biological process underlying their patients’ diabetes in a realtime dashboard.
+
+![](./images/tricky-slow-decline-infer.png){height=150px}
 
 
 ## Appendix 1 - Model {#maths}
